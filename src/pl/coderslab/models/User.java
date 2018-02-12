@@ -169,4 +169,33 @@ public class User {
 	        this.id=0;
 	    }
 	}
+	
+	/**pobranie wszystkich członków danej grupy 
+	 * (dopisz metodę  loadAllByGrupId  do klasy  User )
+	 * SELECT * FROM `Users` WHERE `person_group_id` = ?
+	 * @param conn
+	 * @param group
+	 * @return
+	 * @throws SQLException
+	 */
+	static public User[] loadUserById(Connection conn, Group group) throws SQLException {
+		ArrayList<User> loadedUsersById = new ArrayList<User>();
+		String sql = "SELECT * FROM `Users` WHERE `person_group_id` = ?";
+		PreparedStatement preparedStatement;
+		preparedStatement = conn.prepareStatement(sql);
+		preparedStatement.setInt(1, group.getId());
+		ResultSet resultSet = preparedStatement.executeQuery();
+		while (resultSet.next()) {
+			User loadedUserById = new User();
+			loadedUserById.id = resultSet.getInt("id");
+			loadedUserById.username = resultSet.getString("username");
+			loadedUserById.password = resultSet.getString("password");
+			loadedUserById.email = resultSet.getString("email");
+			loadedUsersById.add(loadedUserById);
+		}
+		User[] UsersByIdArray = new User[loadedUsersById.size()];
+		UsersByIdArray = loadedUsersById.toArray(UsersByIdArray);
+		return UsersByIdArray;
+	}
+	
 }
