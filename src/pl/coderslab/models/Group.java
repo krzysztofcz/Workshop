@@ -16,6 +16,14 @@ import java.util.ArrayList;
  */
 public class Group {
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Group [id=" + id + ", name=" + name + "]";
+	}
+	
 	private int id;
 	private String name;
 

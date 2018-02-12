@@ -9,6 +9,15 @@ import java.util.ArrayList;
 import pl.coderslab.workshop.tools.getFormatedDateTimeInString;
 
 public class Solution {
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Solution [id=" + id + ", created=" + created + ", updated=" + updated + ", description=" + description
+				+ ", exercise_id=" + exercise_id + ", users_id=" + users_id + "]";
+	}
 	/**
 	 * empty constructor
 	 */
@@ -180,7 +189,7 @@ public class Solution {
 	 * @throws SQLException
 	 */
 	public void delete(Connection conn) throws SQLException {
-	    if (this.id != 0) {
+	    if (this.id != 0 && this!=null) {
 	        String sql = "DELETE FROM solution WHERE id= ?";
 	        PreparedStatement preparedStatement;
 	        preparedStatement = conn.prepareStatement(sql);

@@ -20,6 +20,16 @@ public class User {
 	
 	public User() {}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", email=" + email + ", username=" + username + ", password=" + password + ", token="
+				+ token + ", tokenExpire=" + tokenExpire + ", loginTries=" + loginTries + ", lastLoginDate="
+				+ lastLoginDate + "]";
+	}
+
 	public	User(String	username, String email,	String	password)	{
 		this.username =	username;
 		this.email = email;

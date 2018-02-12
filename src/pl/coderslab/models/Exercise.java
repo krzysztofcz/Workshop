@@ -12,6 +12,15 @@ public class Exercise {
 	private String title;
 	private String description;
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Exercise [id=" + id + ", title=" + title + ", description=" + description + "]";
+	}
+	
+	
 	/**
 	 *  empty constructor
 	 */
@@ -144,5 +153,34 @@ public class Exercise {
 	        preparedStatement.executeUpdate();
 	        this.id=0;
 	    }
+	}
+	
+	public static Exercise[] loadAllByUserId(Connection conn, User user) throws SQLException {
+		
+//		SELECT exercise.id,exercise.title,exercise.description FROM exercise JOIN solution ON exercise.id=solution.exercise_id JOIN Users ON solution.users_id = Users.id WHERE Users.id=3
+		
+		if(user.getId()!=0) {
+		ArrayList<Exercise> exercisesByUserId = new ArrayList<Exercise>();
+		String sql = "SELECT exercise.id,exercise.title,exercise.description "
+				+ "FROM exercise JOIN solution ON exercise.id=solution.exercise_id "
+				+ "JOIN Users ON solution.users_id = Users.id "
+				+ "WHERE Users.id= ? ";
+		PreparedStatement preparedStatement;
+		preparedStatement = conn.prepareStatement(sql);
+		preparedStatement.setInt(1, user.getId());
+		ResultSet resultSet = preparedStatement.executeQuery();
+		while (resultSet.next()) {
+			Exercise loadedExerciseByUserId = new Exercise();
+			loadedExerciseByUserId.id = resultSet.getInt("id");
+			loadedExerciseByUserId.title = resultSet.getString("title");
+			loadedExerciseByUserId.description = resultSet.getString("description");
+			exercisesByUserId.add(loadedExerciseByUserId);
+		}
+		Exercise[] exercisesByUserIdArray = new Exercise[exercisesByUserId.size()];
+		exercisesByUserIdArray = exercisesByUserId.toArray(exercisesByUserIdArray);
+		return exercisesByUserIdArray;
+		} else {
+			return null;
+		}
 	}
 }
