@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class ConnectDB {	
 	
-	public static Connection connect() {
+	public static Connection connect() throws SQLException {
 		Connection con = null;
 		String url="jdbc:mysql://127.0.0.1:3306/";
 		String db="workshop";
