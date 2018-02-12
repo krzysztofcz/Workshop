@@ -11,7 +11,7 @@ import pl.coderslab.workshop.models.Exercise;
 import pl.coderslab.workshop.models.Group;
 import pl.coderslab.workshop.models.Solution;
 import pl.coderslab.workshop.models.User;
-import pl.coderslab.workshop.tools.ConnectDB;
+import pl.coderslab.workshop.mysql.ConnectDB;
 
 
 public class main1 {
