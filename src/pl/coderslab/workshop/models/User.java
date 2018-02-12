@@ -1,4 +1,4 @@
-package pl.coderslab.models;
+package pl.coderslab.workshop.models;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import org.mindrot.jbcrypt.BCrypt;
+import org.mindrot.workshop.jbcrypt.BCrypt;
 
 public class User {
 	private	int id;

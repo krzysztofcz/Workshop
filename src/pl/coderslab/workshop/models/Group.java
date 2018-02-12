@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.coderslab.models;
+package pl.coderslab.workshop.models;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
