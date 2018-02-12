@@ -178,8 +178,8 @@ public class User {
 	 * @return
 	 * @throws SQLException
 	 */
-	static public User[] loadUserById(Connection conn, Group group) throws SQLException {
-		ArrayList<User> loadedUsersById = new ArrayList<User>();
+	static public User[] loadAllByGrupId(Connection conn, Group group) throws SQLException {
+		ArrayList<User> loadedAllByGrupId = new ArrayList<User>();
 		String sql = "SELECT * FROM `Users` WHERE `person_group_id` = ?";
 		PreparedStatement preparedStatement;
 		preparedStatement = conn.prepareStatement(sql);
@@ -191,11 +191,11 @@ public class User {
 			loadedUserById.username = resultSet.getString("username");
 			loadedUserById.password = resultSet.getString("password");
 			loadedUserById.email = resultSet.getString("email");
-			loadedUsersById.add(loadedUserById);
+			loadedAllByGrupId.add(loadedUserById);
 		}
-		User[] UsersByIdArray = new User[loadedUsersById.size()];
-		UsersByIdArray = loadedUsersById.toArray(UsersByIdArray);
-		return UsersByIdArray;
+		User[] loadAllByGrupId = new User[loadedAllByGrupId.size()];
+		loadAllByGrupId = loadedAllByGrupId.toArray(loadAllByGrupId);
+		return loadAllByGrupId;
 	}
 	
 }
