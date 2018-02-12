@@ -2,11 +2,12 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 import pl.coderslab.models.Exercise;
+import pl.coderslab.models.Group;
 import pl.coderslab.models.Solution;
 import pl.coderslab.models.User;
-import pl.coderslab.workshop.tools.getFormatedDateTimeInString;
 
 
 public class main1 {
@@ -132,6 +133,28 @@ public class main1 {
 //			for ( Exercise ex : exallbyuser) {
 //				System.out.println(ex);
 //			}
+			
+//			//CHECK class User method loadAllByGrupId . WORKS OK
+//			Group grupa = Group.loadGroupById(con, 2);
+//			User[] lista = User.loadAllByGrupId(con, grupa);
+//			for (User u : lista) {
+//				System.out.println(u);
+//			}
+//			
+//			//CHECK class Exercise method loadAllByUserId . . WORKS OK
+//			User user21 = User.loadUserById(con, 3);
+//			Exercise[] ex = Exercise.loadAllByUserId(con, user21);
+//			for (Exercise e : ex) {
+//				System.out.println(e);
+//			}
+//			
+//			//CHECK class Solution method loadAllByExerciseId . WORKS OK
+//			Exercise ex1 = Exercise.loadExerciseById(con, 2);
+//			Solution[] sol321 = Solution.loadAllByExerciseId(con, ex1);
+//			for(Solution ex123: sol321) {
+//				System.out.println(ex123);
+//			}
+			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
