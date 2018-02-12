@@ -27,6 +27,12 @@ public class User {
 	}	
 	
 	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+	/**
 	 * @return the username
 	 */	
 	public String getUsername() {
@@ -64,7 +70,7 @@ public class User {
 		this.email = email;
 	}
 	
-	/**zapisuje do bazy danych obiekt
+	/**zapisuje/edytuje do bazy danych obiekt SAVE(insert into) or UPDATE(update) 
 	 * @param conn - polaczenie do bazy danych
 	 * @throws SQLException
 	 */
