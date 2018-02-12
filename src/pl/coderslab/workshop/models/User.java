@@ -23,11 +23,37 @@ public class User {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
-	@Override
-	public String toString() {
+	
+	public String toStringasd() {
 		return "User [id=" + id + ", email=" + email + ", username=" + username + ", password=" + password + ", token="
 				+ token + ", tokenExpire=" + tokenExpire + ", loginTries=" + loginTries + ", lastLoginDate="
 				+ lastLoginDate + "]";
+	}
+	
+	@Override
+	public String toString() {
+		return "[" + id + ", " + email + ", " + username + ", " + password + ", " + token + ", " + tokenExpire + ", "
+				+ loginTries + ", " + lastLoginDate + "] ";
+	}
+
+	/** Zwraca tylko te pola ktore sa wymagane aby utworzyc obiekt User<br>  
+	 * @param option <br> <b>req</b> tylko pola wymaganie <br>
+	 * <b>pola</b> tylko nazwy wszystkich pol<br>
+	 * <b>wartosci</b> tylko wartosci z wszystkich pol<br>
+	 * <b>zande z powyzszych </b> zwraca pole z wartoscia tego pola
+	 * @return - <tt>String</tt> wg wybrango parametru
+	 */
+	public String toString(String option) {
+		if(option.equalsIgnoreCase("req")) {
+			return "Wymagane pola dla User [email, username,password]";
+		} else if (option.equalsIgnoreCase("pola")){
+			return "[id, email, username, password, token, tokenExpire, loginTries, lastLoginDate]";
+		} else if (option.equalsIgnoreCase("wartosci")) {
+			return "[" + id + ", " + email + ", " + username + ", " + password + ", " + token + ", " + tokenExpire + ", "
+					+ loginTries + ", " + lastLoginDate + "] ";
+		} else {
+			return this.toString();
+		}
 	}
 
 	public	User(String	username, String email,	String	password)	{
