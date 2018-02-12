@@ -56,9 +56,9 @@ public class User {
 		}
 	}
 
-	public	User(String	username, String email,	String	password)	{
-		this.username =	username;
+	public	User(String email,String username, String password)	{
 		this.email = email;
+		this.username =	username;
 		this.setPassword(password);
 	}	
 	
