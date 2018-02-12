@@ -1,6 +1,8 @@
 
+//import java.sql.Connection;
+//import java.sql.DriverManager;
+//import java.sql.SQLException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -8,25 +10,18 @@ import pl.coderslab.models.Exercise;
 import pl.coderslab.models.Group;
 import pl.coderslab.models.Solution;
 import pl.coderslab.models.User;
+import pl.coderslab.workshop.tools.ConnectDB;
 
 
 public class main1 {
 
-	public static void main(String[] args) {
-		
+	public static void main(String[] args) throws SQLException {
+			
 		String url="jdbc:mysql://127.0.0.1:3306/workshop";
 		String user="root";
 		String password="coderslab";
 		
 //		try (Connection con = DriverManager.getConnection(url, user, password)){
-////	    	User nowyUser = new User();
-////	    	nowyUser.saveToDB(con);
-//	    	User nowyUser1 = new User("imie i login","email@w2p.pl","moj4ehaslo");
-//	    	nowyUser1.saveToDB(con);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-		try (Connection con = DriverManager.getConnection(url, user, password)){
 //	    	System.out.println(User.loadUserById(con, 0));
 //	    	System.out.println(User.loadUserById(con, 1));
 //	    	System.out.println(User.loadUserById(con, 2));
@@ -156,8 +151,13 @@ public class main1 {
 //			}
 			
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+		Connection con = ConnectDB.connect();
+		User[] user999 = User.loadAllUsers(con);
+		for ( User us : user999) {
+			System.out.println(us);
 		}
 	}
 
