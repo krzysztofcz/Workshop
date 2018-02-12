@@ -3,7 +3,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import pl.coderslab.models.Exercise;
 import pl.coderslab.models.Solution;
+import pl.coderslab.models.User;
 import pl.coderslab.workshop.tools.getFormatedDateTimeInString;
 
 
@@ -109,10 +111,28 @@ public class main1 {
 //			sol0.saveToDB(con);
 //			sol1.saveToDB(con);
 //			
-			for(Solution sol : Solution.loadAllSolutions(con)) {
-				System.out.println(sol.getId()+" "+sol.getCreated()+" "+sol.getUpdated()+" "+sol.getDescription()+" "+sol.getExercise_id()+" "+sol.getUsers_id()+"\n");
-			}
-							
+//			for(Solution sol : Solution.loadAllSolutions(con)) {
+//				System.out.println(sol.getId()+" "+sol.getCreated()+" "+sol.getUpdated()+" "+sol.getDescription()+" "+sol.getExercise_id()+" "+sol.getUsers_id()+"\n");
+//			}
+			
+//			sol1.delete(con);
+//			sol0.delete(con);
+			
+			
+			
+//			for(Solution sol : Solution.loadAllSolutions(con)) {
+//				System.out.println(sol.getId()+" "+sol.getCreated()+" "+sol.getUpdated()+" "+sol.getDescription()+" "+sol.getExercise_id()+" "+sol.getUsers_id()+"\n");
+//			}
+//			
+//			User user123 = new User();
+//			user123 = User.loadUserById(con, 1);
+//			
+//			Exercise[] exallbyuser = Exercise.loadAllByUserId(con,user123);
+//			
+//			for ( Exercise ex : exallbyuser) {
+//				System.out.println(ex);
+//			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
