@@ -189,7 +189,7 @@ public class Solution {
 	 * @throws SQLException
 	 */
 	public void delete(Connection conn) throws SQLException {
-	    if (this.id != 0 && this!=null) {
+	    if (this.id != 0) {
 	        String sql = "DELETE FROM solution WHERE id= ?";
 	        PreparedStatement preparedStatement;
 	        preparedStatement = conn.prepareStatement(sql);
@@ -197,6 +197,36 @@ public class Solution {
 	        preparedStatement.executeUpdate();
 	        this.id=0;
 	    }
+	}
+	
+	/** pobranie wszystkich rozwiązań danego zadania posortowanych od najnowszego do najstarszego
+	 * (dopisz metodę loadAllByExerciseId do klasy Solution )
+	 * SELECT * FROM solution WHERE exercise_id = 2 ORDER BY created DESC
+	 * @param conn
+	 * @param exercise
+	 * @return Tablice z typami Solution[]
+	 * @throws SQLException
+	 */
+	public static Solution[] loadAllByExerciseId(Connection conn,Exercise exercise) throws SQLException {
+		ArrayList<Solution> solutionsloadAllByExerciseId = new ArrayList<Solution>();
+		String sql = "SELECT * FROM solution WHERE exercise_id = ? ORDER BY created DESC";
+		PreparedStatement preparedStatement;
+		preparedStatement = conn.prepareStatement(sql);
+		preparedStatement.setInt(1, exercise.getId());
+		ResultSet resultSet = preparedStatement.executeQuery();
+		while (resultSet.next()) {
+			Solution loadedSolutionByExerciseId = new Solution();
+			loadedSolutionByExerciseId.id = resultSet.getInt("id");
+			loadedSolutionByExerciseId.created = resultSet.getString("created");
+			loadedSolutionByExerciseId.updated= resultSet.getString("updated");
+			loadedSolutionByExerciseId.description= resultSet.getString("description");
+			loadedSolutionByExerciseId.exercise_id = resultSet.getInt("exercise_id");
+			loadedSolutionByExerciseId.users_id = resultSet.getInt("users_id");
+			solutionsloadAllByExerciseId.add(loadedSolutionByExerciseId);
+		}
+		Solution[] solutionsAllByExerciseIdArray = new Solution[solutionsloadAllByExerciseId.size()];
+		solutionsAllByExerciseIdArray = solutionsloadAllByExerciseId.toArray(solutionsAllByExerciseIdArray);
+		return solutionsAllByExerciseIdArray;
 	}
 	
 }
