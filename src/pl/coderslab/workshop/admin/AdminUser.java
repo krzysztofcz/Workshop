@@ -7,7 +7,7 @@ import java.util.Scanner;
 import pl.coderslab.workshop.models.User;
 import pl.coderslab.workshop.mysql.ConnectDB;
 import pl.coderslab.workshop.tools.CheckEmailAddress;
-public class UsersAdmin {
+public class AdminUser {
 
 	private String name = "użytkownia";
 	
