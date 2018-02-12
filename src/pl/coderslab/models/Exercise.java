@@ -155,11 +155,15 @@ public class Exercise {
 	    }
 	}
 	
+	/** pobranie wszystkich rozwiązań danego użytkownika
+	 * (dopisz metode loadAllByUserId do klasy Exercise )
+	 * SELECT exercise.id,exercise.title,exercise.description FROM exercise JOIN solution ON exercise.id=solution.exercise_id JOIN Users ON solution.users_id = Users.id WHERE Users.id=3
+	 * @param conn
+	 * @param user
+	 * @return
+	 * @throws SQLException
+	 */
 	public static Exercise[] loadAllByUserId(Connection conn, User user) throws SQLException {
-		
-//		SELECT exercise.id,exercise.title,exercise.description FROM exercise JOIN solution ON exercise.id=solution.exercise_id JOIN Users ON solution.users_id = Users.id WHERE Users.id=3
-		
-		if(user.getId()!=0) {
 		ArrayList<Exercise> exercisesByUserId = new ArrayList<Exercise>();
 		String sql = "SELECT exercise.id,exercise.title,exercise.description "
 				+ "FROM exercise JOIN solution ON exercise.id=solution.exercise_id "
@@ -179,8 +183,5 @@ public class Exercise {
 		Exercise[] exercisesByUserIdArray = new Exercise[exercisesByUserId.size()];
 		exercisesByUserIdArray = exercisesByUserId.toArray(exercisesByUserIdArray);
 		return exercisesByUserIdArray;
-		} else {
-			return null;
-		}
 	}
 }
