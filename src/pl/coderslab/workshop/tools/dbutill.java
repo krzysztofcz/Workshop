@@ -1,6 +1,7 @@
 package pl.coderslab.workshop.tools;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.naming.InitialContext;
@@ -10,11 +11,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
-import org.apache.tomcat.jdbc.pool.DataSource;
-
-import com.mysql.jdbc.Connection;
-import com.sun.xml.internal.bind.CycleRecoverable.Context;
 
 /**
  * Servlet implementation class dbutill
