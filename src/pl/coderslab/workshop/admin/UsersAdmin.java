@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import pl.coderslab.workshop.models.User;
 import pl.coderslab.workshop.mysql.ConnectDB;
-
+import pl.coderslab.workshop.tools.CheckEmailAddress;
 public class UsersAdmin {
 
 	private String name = "użytkownia";
@@ -70,22 +70,35 @@ public class UsersAdmin {
 	 * @throws SQLException
 	 */
 	public static void addUser(Scanner scan) throws SQLException {
-		System.out.println("Prosze podaj wartosci dla USER:");
+		System.out.println("Prosze podaj wartosci dla uzytkownia:");
 		String[] pola = new User().toString("pola").split(",");
-		System.out.println(pola[1]);
-		String email = scan.nextLine();
-		System.out.println(pola[2]);
-		String username = scan.nextLine();
-		System.out.println(pola[3]);
-		String password = scan.nextLine();
-		User user = new User(username, email, password);
-		startShowAll();
+		String email=null,username=null,password=null;
+		boolean polaSaNiePoprawne=true;
+		
+		while(polaSaNiePoprawne) {
+			System.out.println(pola[1]);
+			email = scan.nextLine();
+			System.out.println(pola[2]);
+			username = scan.nextLine();
+			System.out.println(pola[3]);
+			password = scan.nextLine();
+						
+			if( email.equals(null) || username.equals(null) || password.equals(null) || !email.contains("@") || !email.contains(".") ||
+					!(new CheckEmailAddress().isValid(email)) ) {
+				System.out.println("Wszystkie pola musza być wypelnione oraz być poprawne!");
+			} else {
+				polaSaNiePoprawne = false;
+				System.out.println("Wszystkie pola są poprawnie wypelnione.");
+			}
+		}			
 		try {
 			Connection con = ConnectDB.connect();
+			User user = new User(email,username,password);
 			user.saveToDB(con);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		startShowAll();
 	}
 	
 	/** edytuje usera o wybranym id ktory pobiera ze scanera
