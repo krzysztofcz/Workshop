@@ -12,14 +12,30 @@ public class Exercise {
 	private String title;
 	private String description;
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "Exercise [id=" + id + ", title=" + title + ", description=" + description + "]";
+		return "[" + id + ", " + title + ", " + description + "]";
 	}
 	
+	public String toString(String option) {
+		if(option.equalsIgnoreCase("req+pola")) {
+			return "Title,Description";
+		} else if (option.equalsIgnoreCase("req+wartosci")){
+			return title+","+description;
+		} else if (option.equalsIgnoreCase("pola")){
+			return "[id,title,description]";
+		} else if (option.equalsIgnoreCase("wartosci")){
+			return id+","+title+","+description;
+		} else if (option.equalsIgnoreCase("pola+wartosci")) {
+			return "[id=" + id + ", title=" + title + ", description=" + description + "]";
+		} else {
+			return this.toString();
+		}
+	}
+
+	public Exercise clone() { 
+	    return this;
+	}
 	
 	/**
 	 *  empty constructor
@@ -32,6 +48,7 @@ public class Exercise {
 	 * @param text
 	 */
 	public Exercise(String title, String text) {
+		this.id = 0;
 		this.title = title;
 		this.description = text;
 	}
@@ -102,7 +119,7 @@ public class Exercise {
 	 * @return
 	 * @throws SQLException
 	 */
-	static public Exercise loadExerciseById(Connection conn, int id) throws SQLException {
+	static public Exercise loadById(Connection conn, int id) throws SQLException {
 		String sql = "SELECT * FROM exercise where id=?";
 		PreparedStatement preparedStatement;
 		preparedStatement = conn.prepareStatement(sql);
@@ -123,7 +140,7 @@ public class Exercise {
 	 * @return tablica typu Excercise[] ze wszystkimi zadaniami
 	 * @throws SQLException
 	 */
-	static public Exercise[] loadAllExercises(Connection conn) throws SQLException {
+	static public Exercise[] loadAll(Connection conn) throws SQLException {
 		ArrayList<Exercise> exercises = new ArrayList<Exercise>();
 		String sql = "SELECT * FROM exercise";
 		PreparedStatement preparedStatement;
@@ -183,5 +200,11 @@ public class Exercise {
 		Exercise[] exercisesByUserIdArray = new Exercise[exercisesByUserId.size()];
 		exercisesByUserIdArray = exercisesByUserId.toArray(exercisesByUserIdArray);
 		return exercisesByUserIdArray;
+	}
+	public Exercise clear() {
+		this.id=0;
+		this.setDescription(null);
+		this.setTitle(null);
+		return this;
 	}
 }
