@@ -36,12 +36,15 @@ public class AdminExercise {
 			
 			if(command.equalsIgnoreCase("add")||command.equalsIgnoreCase("1")) {
 				add(scan);
+				showAll();
 			}
 			if(command.equalsIgnoreCase("edit")||command.equalsIgnoreCase("2")) {
 				edit(scan);
+				showAll();
 			}
 			if(command.equalsIgnoreCase("delete")||command.equalsIgnoreCase("3")) {
 				delete(scan);
+				showAll();
 			}
 		}
 
@@ -90,7 +93,6 @@ public class AdminExercise {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		showAll();
 		System.out.println("Added "+getNazwa()+" : "+obiekt.toString("pola+wartosci"));
 	}
 	
@@ -187,10 +189,8 @@ public class AdminExercise {
 			scan.nextLine();
 			obiekt = obiekt.loadById(con, id);
 			if(obiekt!=null) {
-				String temp=("\nDeleted "+getNazwa()+" : "+obiekt.toString("pola+wartosci"));
+				System.out.println("\nDeleted "+getNazwa()+" : "+obiekt.toString("pola+wartosci"));
 				obiekt.delete(con);
-				showAll();
-				System.out.println(temp);
 				System.out.println(getNazwa()+" with ID: "+id+" DELETED from list.\n");
 			} else {
 				System.out.println("This ID : "+id+" is invalid. \n");

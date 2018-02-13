@@ -36,12 +36,15 @@ public class AdminUser extends Admin{
 			
 			if(command.equalsIgnoreCase("add")||command.equalsIgnoreCase("1")) {
 				add(scan);
+				showAll();
 			}
 			if(command.equalsIgnoreCase("edit")||command.equalsIgnoreCase("2")) {
 				edit(scan);
+				showAll();
 			}
 			if(command.equalsIgnoreCase("delete")||command.equalsIgnoreCase("3")) {
 				delete(scan);
+				showAll();
 			}
 		}
 		scan.close();
@@ -90,7 +93,6 @@ public class AdminUser extends Admin{
 			try {
 				Connection con = ConnectDB.connect();
 				obiekt.saveToDB(con);
-				showAll();
 				System.out.println("Added "+getNazwa()+" : "+obiekt.toString("pola+wartosci"));
 			} catch (SQLException e) {
 //				e.printStackTrace();
@@ -158,7 +160,7 @@ public class AdminUser extends Admin{
 				System.out.println("=== END of editing "+getNazwa()+"===");
 				
 				System.out.println("!!! Are you sure you wanna save it ??? \n (1) Y - Yes. \n"
-						+ "(0) \"zero\" or press ANY KEY for NO=DONT SAVE=CANCEL");
+						+ " (0) \"zero\" or press ANY KEY for NO=DONT SAVE=CANCEL");
 				String areUsure=scan.nextLine();
 				boolean areYouSure=areUsure.equalsIgnoreCase("Yes")||areUsure.equalsIgnoreCase("Y")||areUsure.equalsIgnoreCase("1");
 				if(areYouSure){
@@ -170,7 +172,6 @@ public class AdminUser extends Admin{
 					} else {
 						System.out.println("All right.\n");
 						obiekt.saveToDB(con);
-						showAll();
 						System.out.println("New value for "+getNazwa()+" with ID : "+ obiekt.getId()  +" is : \n");
 						System.out.println(obiekt);
 					}
@@ -213,10 +214,8 @@ public class AdminUser extends Admin{
 			scan.nextLine();
 			obiekt = obiekt.loadById(con, id);
 			if(obiekt!=null) {
-				String temp=("\nDeleted "+getNazwa()+" : "+obiekt.toString("pola+wartosci"));
+				System.out.println("\nDeleted "+getNazwa()+" : "+obiekt.toString("pola+wartosci"));
 				obiekt.delete(con);
-				showAll();
-				System.out.println(temp);
 				System.out.println(getNazwa()+" with ID: "+id+" DELETED from list.\n");
 			} else {
 				System.out.println("This ID : "+id+" is invalid. \n");
