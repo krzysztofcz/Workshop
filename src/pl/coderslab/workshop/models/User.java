@@ -20,16 +20,6 @@ public class User {
 	
 	public User() {}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	
-	public String toStringasd() {
-		return "User [id=" + id + ", email=" + email + ", username=" + username + ", password=" + password + ", token="
-				+ token + ", tokenExpire=" + tokenExpire + ", loginTries=" + loginTries + ", lastLoginDate="
-				+ lastLoginDate + "]";
-	}
-	
 	@Override
 	public String toString() {
 		return "[" + id + ", " + email + ", " + username + ", " + password + ", " + token + ", " + tokenExpire + ", "
@@ -44,13 +34,18 @@ public class User {
 	 * @return - <tt>String</tt> wg wybrango parametru
 	 */
 	public String toString(String option) {
-		if(option.equalsIgnoreCase("req")) {
-			return "Wymagane pola dla User [email, username,password]";
+		if(option.equalsIgnoreCase("req+pola")) {
+			return "Email,Username,Password";
+		} else if (option.equalsIgnoreCase("req+wartosci")) {
+			return (email+","+username+","+password) ;
 		} else if (option.equalsIgnoreCase("pola")){
 			return "[id, email, username, password, token, tokenExpire, loginTries, lastLoginDate]";
 		} else if (option.equalsIgnoreCase("wartosci")) {
-			return "[" + id + ", " + email + ", " + username + ", " + password + ", " + token + ", " + tokenExpire + ", "
-					+ loginTries + ", " + lastLoginDate + "] ";
+			return (id+","+email+","+username+","+password+","+token+","+tokenExpire+","+loginTries+","+lastLoginDate) ;
+		} else if (option.equalsIgnoreCase("pola+wartosci")) {
+			return "User [id=" + id + ", email=" + email + ", username=" + username + ", password=" + password + ", token="
+					+ token + ", tokenExpire=" + tokenExpire + ", loginTries=" + loginTries + ", lastLoginDate="
+					+ lastLoginDate + "]";
 		} else {
 			return this.toString();
 		}
@@ -141,7 +136,7 @@ public class User {
 	 * @return obiekt user pobrany z bazy danych
 	 * @throws SQLException
 	 */
-	static public User loadUserById(Connection conn, int id) throws SQLException {
+	static public User loadById(Connection conn, int id) throws SQLException {
 		String sql = "SELECT * FROM Users where id=?";
 		PreparedStatement preparedStatement;
 		preparedStatement = conn.prepareStatement(sql);
@@ -163,7 +158,7 @@ public class User {
 	 * @return - zwraca ArrayList<User>
 	 * @throws SQLException 
 	 */
-	static public User[] loadAllUsers(Connection conn) throws SQLException {
+	static public User[] loadAll(Connection conn) throws SQLException {
 		ArrayList<User> users = new ArrayList<User>();
 		String sql = "SELECT * FROM Users";
 		PreparedStatement preparedStatement;
@@ -222,6 +217,13 @@ public class User {
 		User[] loadAllByGrupId = new User[loadedAllByGrupId.size()];
 		loadAllByGrupId = loadedAllByGrupId.toArray(loadAllByGrupId);
 		return loadAllByGrupId;
+	}
+	public User clear() {
+		this.id=0;
+		this.setUsername(null);
+		this.setEmail(null);;
+		this.setPassword(null);
+		return this;
 	}
 	
 }
