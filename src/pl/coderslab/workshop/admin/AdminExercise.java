@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import pl.coderslab.workshop.models.Exercise;
-import pl.coderslab.workshop.models.User;
 import pl.coderslab.workshop.mysql.ConnectDB;
 public class AdminExercise {
 
