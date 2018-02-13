@@ -9,15 +9,28 @@ import java.util.ArrayList;
 import pl.coderslab.workshop.tools.getFormatedDateTimeInString;
 
 public class Solution {
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "Solution [id=" + id + ", created=" + created + ", updated=" + updated + ", description=" + description
-				+ ", exercise_id=" + exercise_id + ", users_id=" + users_id + "]";
+		return "[" + id + ", " + created + ", " + updated + ", " + description + ", " + exercise_id + ", " + users_id + "]";
 	}
+	
+	public String toString(String option) {
+		if(option.equalsIgnoreCase("req+pola")) {
+			return "Exercise_id, Users_id";
+		} else if (option.equalsIgnoreCase("req+wartosci")){
+			return (id + "," + created + "," + updated + "," + description + "," + exercise_id + "," + users_id);
+		} else if (option.equalsIgnoreCase("pola")){
+			return "[id, created, updated, description, exercise_id, users_id]";
+		} else if (option.equalsIgnoreCase("wartosci")){
+			return (id + "," + created + "," + updated + "," + description + "," + exercise_id + "," + users_id);
+		} else if (option.equalsIgnoreCase("pola+wartosci")) {
+			return "Solution [id=" + id + ", created=" + created + ", updated=" + updated + ", description=" + description
+					+ ", exercise_id=" + exercise_id + ", users_id=" + users_id + "]";
+		} else {
+			return this.toString();
+		}
+	}
+	
 	/**
 	 * empty constructor
 	 */

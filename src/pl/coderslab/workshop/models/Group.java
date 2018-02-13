@@ -34,7 +34,7 @@ public class Group {
 		} else if (option.equalsIgnoreCase("wartosci")){
 			return id+","+name;
 		} else if (option.equalsIgnoreCase("pola+wartosci")) {
-			return "[id=" + id + ", name=" + name +"]";
+			return "Group [id=" + id + ", name=" + name +"]";
 		} else {
 			return this.toString();
 		}

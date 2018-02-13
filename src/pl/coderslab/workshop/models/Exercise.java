@@ -27,7 +27,7 @@ public class Exercise {
 		} else if (option.equalsIgnoreCase("wartosci")){
 			return id+","+title+","+description;
 		} else if (option.equalsIgnoreCase("pola+wartosci")) {
-			return "[id=" + id + ", title=" + title + ", description=" + description + "]";
+			return "Exercise [id=" + id + ", title=" + title + ", description=" + description + "]";
 		} else {
 			return this.toString();
 		}

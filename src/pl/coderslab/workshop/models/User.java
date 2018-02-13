@@ -27,10 +27,12 @@ public class User {
 	}
 
 	/** Zwraca tylko te pola ktore sa wymagane aby utworzyc obiekt User<br>  
-	 * @param option <br> <b>req</b> tylko pola wymaganie <br>
+	 * @param option <br> <b>req+pola</b> tylko pola wymaganie <br>
+	 * <b>req+wartosci<br> tylko wartosci wymagane
 	 * <b>pola</b> tylko nazwy wszystkich pol<br>
 	 * <b>wartosci</b> tylko wartosci z wszystkich pol<br>
-	 * <b>zande z powyzszych </b> zwraca pole z wartoscia tego pola
+	 * <b>pola+wartosci</b> zwraca pole z wartoscia tego pola
+	 * ( bez option ) 
 	 * @return - <tt>String</tt> wg wybrango parametru
 	 */
 	public String toString(String option) {
