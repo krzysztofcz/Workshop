@@ -77,14 +77,14 @@ public class AdminExercise {
 	 */
 	public static void add(Scanner scan) {
 		System.out.println("Type all values for "+getNazwa()+" :");
-		String[] pola = obiekt.toString("req").split(",");
-		String[] wartosc = new String[pola.length];
+		String[] pola = obiekt.toString("req+pola").split(",");
+		String[] wartosci = new String[pola.length];
 		for(int i=0;i<pola.length;i++) {
 			System.out.println(pola[i]);
-			wartosc[i]=scan.nextLine();			
+			wartosci[i]=scan.nextLine();			
 		}
 		obiekt.clear();
-		obiekt = obiektAdd(pola,wartosc);
+		obiekt = obiektAdd(pola,wartosci);
 		try {
 			Connection con = ConnectDB.connect();
 			obiekt.saveToDB(con);
@@ -128,7 +128,8 @@ public class AdminExercise {
 		return obiekt;
 	}
 
-	/** edytuje usera o wybranym id ktory pobiera ze scanera
+	/** CHYBA UNIWERSAL 
+	 * edytuje usera o wybranym id ktory pobiera ze scanera
 	 * @param scan 
 	 */
 	private static void edit(Scanner scan) {
@@ -137,32 +138,38 @@ public class AdminExercise {
 			showAll();
 			System.out.println("Give me "+getNazwa()+" ID for EDITion:");
 			int id = scan.nextInt();
-			User user = User.loadById(con, id);
-			if(user !=null) {
+			obiekt = obiekt.loadById(con, id);
+			if(obiekt !=null) {
+				System.out.println("That your choise : "+obiekt.toString("pola+wartosci"));
+				String[] pola = obiekt.toString("req+pola").split(",");
+				String[] wartosci = obiekt.toString("req+wartosci").split(",");
+				String[] noweWartosci = new String[pola.length];
 				System.out.println("=== START of editing "+getNazwa()+"===");
-				System.out.println("ID: "+user.getId()+"(pole chronione).");
 				scan.nextLine();//MUSAILEM DODAC TA LINIE bo mi przeskakiwal scan z emaila od razu na username
-				System.out.println("Current email: "+user.getEmail()+" .\nType new email : ");
-				user.setEmail(scan.nextLine());
-				System.out.println("Current username: "+user.getUsername()+" .\nType new username : ");
-				user.setUsername(scan.nextLine());
-				System.out.println("Current password: "+user.getPassword()+" .\nType new password : ");
-				user.setPassword(scan.nextLine());
+
+				for(int i=0;i<pola.length;i++) {
+					System.out.println("Current "+pola[i]+" value is : "+wartosci[i]+".\nType new : "+pola[i]);
+					noweWartosci[i]=scan.nextLine();
+				}
+				
 				System.out.println("=== END of editing "+getNazwa()+"===");
 				
 				System.out.println("!!! Are you sure you wanna save it ??? \n (1) Y - Yes. \n"
-						+ " for NO : (0)  type enything else than \"y\" or \"yes\"");
+						+ " for NO :  press any key or \"0\"(zero) ");
 				String areUsure=scan.nextLine();
 				boolean areYouSure=areUsure.equalsIgnoreCase("Yes")||areUsure.equalsIgnoreCase("Y");
-				
 				if(areYouSure){
-					user.saveToDB(con);
-					System.out.println("New value for "+getNazwa()+" \""+ user.getUsername()+"\"");
-					System.out.println(user);
+					obiekt=obiektAdd(pola,noweWartosci);
+					obiekt.saveToDB(con);
+					System.out.println("New value for "+getNazwa()+" with ID : "+ obiekt.getId()  +" is : \n");
+					System.out.println(obiekt);
 				} else {
-					System.out.println("I didnt save those changes. Try again.");
+					System.out.println("NO: nothing to save. You can try again.");
 				}
-			}				
+			} else {
+				System.out.println("This ID : "+id+" is invalid. \n");
+				scan.nextLine();//ADDED COS IT WAS PRINTIG 2 TIME showAll method
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
