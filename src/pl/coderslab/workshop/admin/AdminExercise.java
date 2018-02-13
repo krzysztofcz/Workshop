@@ -156,7 +156,7 @@ public class AdminExercise {
 				System.out.println("!!! Are you sure you wanna save it ??? \n (1) Y - Yes. \n"
 						+ "(0) \"zero\" or press ANY KEY for NO=DONT SAVE=CANCEL");
 				String areUsure=scan.nextLine();
-				boolean areYouSure=areUsure.equalsIgnoreCase("Yes")||areUsure.equalsIgnoreCase("Y");
+				boolean areYouSure=areUsure.equalsIgnoreCase("Yes")||areUsure.equalsIgnoreCase("Y")||areUsure.equalsIgnoreCase("1");
 				if(areYouSure){
 					obiekt=obiektAdd(pola,noweWartosci);
 					obiekt.saveToDB(con);
