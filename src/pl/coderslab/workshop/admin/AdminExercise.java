@@ -128,7 +128,7 @@ public class AdminExercise {
 	}
 
 	/** CHYBA UNIWERSAL 
-	 * edytuje usera o wybranym id ktory pobiera ze scanera
+	 * edytuje Exercise o wybranym id ktory pobiera ze scanera
 	 * @param scan 
 	 */
 	private static void edit(Scanner scan) {
@@ -144,7 +144,7 @@ public class AdminExercise {
 				String[] wartosci = obiekt.toString("req+wartosci").split(",");
 				String[] noweWartosci = new String[pola.length];
 				System.out.println("=== START of editing "+getNazwa()+"===");
-				scan.nextLine();//MUSAILEM DODAC TA LINIE bo mi przeskakiwal scan z emaila od razu na username
+				scan.nextLine();//MUSAILEM DODAC TA LINIE bo mi przeskakiwal scan.nextLine() łapał auto entera
 
 				for(int i=0;i<pola.length;i++) {
 					System.out.println("Current "+pola[i]+" value is : "+wartosci[i]+".\nType new : "+pola[i]);
