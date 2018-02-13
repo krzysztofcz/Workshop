@@ -44,7 +44,6 @@ public class AdminUser extends Admin{
 				delete(scan);
 			}
 		}
-
 		scan.close();
 	}
 
@@ -94,7 +93,7 @@ public class AdminUser extends Admin{
 				showAll();
 				System.out.println("Added "+getNazwa()+" : "+obiekt.toString("pola+wartosci"));
 			} catch (SQLException e) {
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		}
 	}
@@ -132,7 +131,8 @@ public class AdminUser extends Admin{
 		return obiekt;
 	}
 	
-	/** edytuje usera o wybranym id ktory pobiera ze scanera
+	/** CHYBA UNIWERSAL 
+	 * edytuje usera o wybranym id ktory pobiera ze scanera
 	 * @param scan 
 	 */
 	private static void edit(Scanner scan) {
@@ -141,35 +141,63 @@ public class AdminUser extends Admin{
 			showAll();
 			System.out.println("Give me "+getNazwa()+" ID for EDITion:");
 			int id = scan.nextInt();
-			User user = User.loadById(con, id);
-			if(user !=null) {
+			obiekt = obiekt.loadById(con, id);
+			if(obiekt !=null) {
+				System.out.println("That your choise : "+obiekt.toString("pola+wartosci"));
+				String[] pola = obiekt.toString("req+pola").split(",");
+				String[] wartosci = obiekt.toString("req+wartosci").split(",");
+				String[] noweWartosci = new String[pola.length];
 				System.out.println("=== START of editing "+getNazwa()+"===");
-				System.out.println("ID: "+user.getId()+"(pole chronione).");
-				scan.nextLine();//MUSAILEM DODAC TA LINIE bo mi przeskakiwal scan z emaila od razu na username
-				System.out.println("Current email: "+user.getEmail()+" .\nType new email : ");
-				user.setEmail(scan.nextLine());
-				System.out.println("Current username: "+user.getUsername()+" .\nType new username : ");
-				user.setUsername(scan.nextLine());
-				System.out.println("Current password: "+user.getPassword()+" .\nType new password : ");
-				user.setPassword(scan.nextLine());
+				scan.nextLine();//MUSAILEM DODAC TA LINIE bo mi przeskakiwal scan.nextLine() łapał auto entera
+
+				for(int i=0;i<pola.length;i++) {
+					System.out.println("Current "+pola[i]+" value is : "+wartosci[i]+".\nType new : "+pola[i]);
+					noweWartosci[i]=scan.nextLine();
+				}
+				
 				System.out.println("=== END of editing "+getNazwa()+"===");
 				
 				System.out.println("!!! Are you sure you wanna save it ??? \n (1) Y - Yes. \n"
-						+ " for NO : (0)  type enything else than \"y\" or \"yes\"");
+						+ "(0) \"zero\" or press ANY KEY for NO=DONT SAVE=CANCEL");
 				String areUsure=scan.nextLine();
 				boolean areYouSure=areUsure.equalsIgnoreCase("Yes")||areUsure.equalsIgnoreCase("Y")||areUsure.equalsIgnoreCase("1");
-				
 				if(areYouSure){
-					user.saveToDB(con);
-					System.out.println("New value for "+getNazwa()+" \""+ user.getUsername()+"\"");
-					System.out.println(user);
+					
+					obiekt = obiektAdd(pola,noweWartosci);
+					if (!new CheckEmailAddress().isValid(obiekt.getEmail())|| checkNull(obiekt.getUsername()) ||
+						checkNull(obiekt.getPassword()) || checkNull(obiekt.getEmail()) || !emailIsUnique(obiekt.getEmail())	) {
+						System.out.println("All fields need to be fill corectly!\n");
+					} else {
+						System.out.println("All right.\n");
+						obiekt.saveToDB(con);
+						showAll();
+						System.out.println("New value for "+getNazwa()+" with ID : "+ obiekt.getId()  +" is : \n");
+						System.out.println(obiekt);
+					}
 				} else {
-					System.out.println("I didnt save those changes. Try again.");
+					System.out.println("NO: nothing to save. You can try again.\n");
 				}
-			}				
+			} else {
+				System.out.println("This ID : "+id+" is invalid. \n");
+				scan.nextLine();//ADDED COS IT WAS PRINTIG 2 TIME showAll method
+			}
+		} catch (SQLException e) {
+//			e.printStackTrace();
+		}
+	}
+	public static boolean emailIsUnique (String email) {
+		try {
+			Connection con = ConnectDB.connect();
+			listaObiektow = obiekt.loadAll(con);
+			for (int i=0;i<listaObiektow.length;i++) {
+				if(listaObiektow[i].getEmail().equalsIgnoreCase(email)) {
+					return false;
+				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return true;
 	}
 
 	/** UNIWERSALNE UNIWERSALNE UNIWERSALNE
@@ -185,11 +213,14 @@ public class AdminUser extends Admin{
 			scan.nextLine();
 			obiekt = obiekt.loadById(con, id);
 			if(obiekt!=null) {
-				System.out.println("\nDeleted "+getNazwa()+" : "+obiekt.toString("pola+wartosci"));
-				System.out.println(getNazwa()+" with ID: "+id+" DELETED from list.\n");
+				String temp=("\nDeleted "+getNazwa()+" : "+obiekt.toString("pola+wartosci"));
 				obiekt.delete(con);
+				showAll();
+				System.out.println(temp);
+				System.out.println(getNazwa()+" with ID: "+id+" DELETED from list.\n");
+			} else {
+				System.out.println("This ID : "+id+" is invalid. \n");
 			};
-			showAll();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

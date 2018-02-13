@@ -156,7 +156,7 @@ public class main1 {
 //			e.printStackTrace();
 //		}
 		Connection con = ConnectDB.connect();
-		User[] user999 = User.loadAllUsers(con);
+		User[] user999 = User.loadAll(con);
 		for ( User us : user999) {
 			System.out.println(us);
 		}
