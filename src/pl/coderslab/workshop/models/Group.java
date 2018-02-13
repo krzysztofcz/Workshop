@@ -21,12 +21,28 @@ public class Group {
 	 */
 	@Override
 	public String toString() {
-		return "Group [id=" + id + ", name=" + name + "]";
+		return "[" + id + ", " + name + "]";
 	}
+	
+	public String toString(String option) {
+		if(option.equalsIgnoreCase("req+pola")) {
+			return "Name";
+		} else if (option.equalsIgnoreCase("req+wartosci")){
+			return name;
+		} else if (option.equalsIgnoreCase("pola")){
+			return "[id,name]";
+		} else if (option.equalsIgnoreCase("wartosci")){
+			return id+","+name;
+		} else if (option.equalsIgnoreCase("pola+wartosci")) {
+			return "[id=" + id + ", name=" + name +"]";
+		} else {
+			return this.toString();
+		}
+	}
+	
 	
 	private int id;
 	private String name;
-
 	public Group() {};
 	
 	/**
@@ -85,7 +101,7 @@ public class Group {
 	 * @return
 	 * @throws SQLException
 	 */
-	static public Group loadGroupById(Connection conn, int id) throws SQLException {
+	static public Group loadById(Connection conn, int id) throws SQLException {
 		String sql = "SELECT * FROM user_group where id=?";
 		PreparedStatement preparedStatement;
 		preparedStatement = conn.prepareStatement(sql);
@@ -104,7 +120,7 @@ public class Group {
 	 * @return
 	 * @throws SQLException
 	 */
-	static public Group[] loadAllGroup(Connection conn) throws SQLException {
+	static public Group[] loadAll(Connection conn) throws SQLException {
 		ArrayList<Group> group = new ArrayList<Group>();
 		String sql = "SELECT * FROM user_group";
 		PreparedStatement preparedStatement;
@@ -133,5 +149,10 @@ public class Group {
 	        preparedStatement.executeUpdate();
 	        this.id=0;
 	    }
+	}
+	public Group clear() {
+		this.id=0;
+		this.setName(null);
+		return this;
 	}
 }
