@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import pl.coderslab.workshop.models.Exercise;
 import pl.coderslab.workshop.mysql.ConnectDB;
 import pl.coderslab.workshop.models.Group;
 public class AdminGroup {
