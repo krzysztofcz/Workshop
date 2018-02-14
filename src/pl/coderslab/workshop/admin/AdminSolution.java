@@ -1,13 +1,10 @@
 package pl.coderslab.workshop.admin;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import pl.coderslab.workshop.models.Exercise;
 import pl.coderslab.workshop.models.Solution;
-import pl.coderslab.workshop.models.User;
 
 public class AdminSolution extends Admin{
 
