@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import pl.coderslab.workshop.mysql.ConnectDB;
+
 
 /**
  * @author kcz
@@ -43,6 +45,7 @@ public class Group {
 	
 	private int id;
 	private String name;
+	
 	public Group() {};
 	
 	/**
@@ -71,10 +74,10 @@ public class Group {
 		this.name = name;
 	}
 	/** zapisauje do bazy danych lub robi update wpisu juz istenijacego
-	 * @param conn - parametr polaczenia do db
 	 * @throws SQLException
 	 */
-	public void saveToDB(Connection conn) throws SQLException {
+	public void saveToDB() throws SQLException {
+		Connection conn = ConnectDB.connect();
 		if (this.id == 0) {
 			String sql = "INSERT INTO user_group(name) VALUES (?)";
 			String generatedColumns[] = { "ID" };
@@ -96,14 +99,14 @@ public class Group {
 		}
 	}
 	/** loaduje grupe by id to obiektu Group
-	 * @param conn - argument polaczenia do DB
 	 * @param id - id grupy
 	 * @return
 	 * @throws SQLException
 	 */
-	static public Group loadById(Connection conn, int id) throws SQLException {
+	static public Group loadById(Integer id) throws SQLException {
 		String sql = "SELECT * FROM user_group where id=?";
 		PreparedStatement preparedStatement;
+		Connection conn = ConnectDB.connect();
 		preparedStatement = conn.prepareStatement(sql);
 		preparedStatement.setInt(1, id);
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -116,14 +119,14 @@ public class Group {
 		return null;
 	}
 	/** zwraca tablice typu Group[] z wszystkimi grupami
-	 * @param conn
 	 * @return
 	 * @throws SQLException
 	 */
-	static public Group[] loadAll(Connection conn) throws SQLException {
+	static public Group[] loadAll() throws SQLException {
 		ArrayList<Group> group = new ArrayList<Group>();
 		String sql = "SELECT * FROM user_group";
 		PreparedStatement preparedStatement;
+		Connection conn = ConnectDB.connect();
 		preparedStatement = conn.prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		while (resultSet.next()) {
@@ -137,13 +140,13 @@ public class Group {
 		return groupArray;
 	}
 	/** remove/delete group from DB
-	 * @param conn
 	 * @throws SQLException
 	 */
-	public void delete(Connection conn) throws SQLException {
+	public void delete() throws SQLException {
 	    if (this.id != 0) {
 	        String sql = "DELETE FROM user_group WHERE id= ?";
 	        PreparedStatement preparedStatement;
+	        Connection conn = ConnectDB.connect();
 	        preparedStatement = conn.prepareStatement(sql);
 	        preparedStatement.setInt(1, this.id);
 	        preparedStatement.executeUpdate();
