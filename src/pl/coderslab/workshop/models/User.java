@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 import org.mindrot.workshop.jbcrypt.BCrypt;
 
+import pl.coderslab.workshop.mysql.ConnectDB;
+
 public class User {
 	private	int id;
 	private String email;
@@ -53,7 +55,7 @@ public class User {
 		}
 	}
 
-	public	User(String email,String username, String password)	{
+	public User(String email,String username, String password)	{
 		this.email = email;
 		this.username =	username;
 		this.setPassword(password);
@@ -104,10 +106,10 @@ public class User {
 	}
 	
 	/**zapisuje/edytuje do bazy danych obiekt SAVE(insert into) or UPDATE(update) 
-	 * @param conn - polaczenie do bazy danych
 	 * @throws SQLException
 	 */
-	public void saveToDB(Connection conn) throws SQLException {
+	public void saveToDB() throws SQLException {
+		Connection conn = ConnectDB.connect();
 		if (this.id == 0) {
 			String sql = "INSERT INTO Users(username, email, password) VALUES (?, ?, ?)";
 			String generatedColumns[] = { "ID" };
@@ -133,12 +135,12 @@ public class User {
 		}
 	}
 	/** wczytuje z bazy danych usera o id i zwraca obiekt user
-	 * @param conn - polaczenie do bazy danych
 	 * @param id - id usera do wczytania
 	 * @return obiekt user pobrany z bazy danych
 	 * @throws SQLException
 	 */
-	static public User loadById(Connection conn, int id) throws SQLException {
+	static public User loadById(Integer id) throws SQLException {
+		Connection conn = ConnectDB.connect();
 		String sql = "SELECT * FROM Users where id=?";
 		PreparedStatement preparedStatement;
 		preparedStatement = conn.prepareStatement(sql);
@@ -156,14 +158,14 @@ public class User {
 	}
 
 	/** zwraca tablice z obiektami typu User ( nasza klasa ) 
-	 * @param conn - typ Connection jako parametr 
 	 * @return - zwraca ArrayList<User>
 	 * @throws SQLException 
 	 */
-	static public User[] loadAll(Connection conn) throws SQLException {
+	static public User[] loadAll() throws SQLException {
 		ArrayList<User> users = new ArrayList<User>();
 		String sql = "SELECT * FROM Users";
 		PreparedStatement preparedStatement;
+		Connection conn = ConnectDB.connect();
 		preparedStatement = conn.prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		while (resultSet.next()) {
@@ -179,11 +181,11 @@ public class User {
 		return uArray;
 	}
 	/** usuwanie uzytkowanika typ klasy User 
-	 * @param con parametr polaczenia
 	 * @throws SQLException 
 	 */
-	public void delete(Connection conn) throws SQLException {
-	    if (this.id != 0) {
+	public void delete() throws SQLException {
+		Connection conn = ConnectDB.connect();
+		if (this.id != 0) {
 	        String sql = "DELETE FROM Users WHERE id= ?";
 	        PreparedStatement preparedStatement;
 	        preparedStatement = conn.prepareStatement(sql);
@@ -196,12 +198,12 @@ public class User {
 	/**pobranie wszystkich członków danej grupy 
 	 * (dopisz metodę  loadAllByGrupId  do klasy  User )
 	 * SELECT * FROM `Users` WHERE `person_group_id` = ?
-	 * @param conn
 	 * @param group
 	 * @return
 	 * @throws SQLException
 	 */
-	static public User[] loadAllByGrupId(Connection conn, Group group) throws SQLException {
+	static public User[] loadAllByGrupId(Group group) throws SQLException {
+		Connection conn = ConnectDB.connect();
 		ArrayList<User> loadedAllByGrupId = new ArrayList<User>();
 		String sql = "SELECT * FROM `Users` WHERE `person_group_id` = ?";
 		PreparedStatement preparedStatement;
@@ -220,12 +222,39 @@ public class User {
 		loadAllByGrupId = loadedAllByGrupId.toArray(loadAllByGrupId);
 		return loadAllByGrupId;
 	}
+	
+	/** ustawia obiekt na id = 0 i reszte wartosci a null lub 0
+	 * @return zwraca pusty obiekt typu User
+	 */
 	public User clear() {
 		this.id=0;
 		this.setUsername(null);
 		this.setEmail(null);;
 		this.setPassword(null);
 		return this;
+	}
+	
+	/** sprawdza i zwraca jesli istenije user o danym emialu ( unique ) 
+	 * @param email string
+	 * @return obiekt jesli istnieje user o takim emailu albo null
+	 * @throws SQLException
+	 */
+	public static User emailIsUnique(String email) throws SQLException {
+		Connection conn = ConnectDB.connect();
+		String sql = "SELECT * FROM `Users` WHERE email = ?";
+		PreparedStatement preparedStatement;
+		preparedStatement = conn.prepareStatement(sql);
+		preparedStatement.setString(1, email);
+		ResultSet resultSet = preparedStatement.executeQuery();
+		if (resultSet.next()) {
+			User loadedUser = new User();
+			loadedUser.id = resultSet.getInt("id");
+			loadedUser.username = resultSet.getString("username");
+			loadedUser.password = resultSet.getString("password");
+			loadedUser.email = resultSet.getString("email");
+			return loadedUser;
+		}
+		return null;
 	}
 	
 }
