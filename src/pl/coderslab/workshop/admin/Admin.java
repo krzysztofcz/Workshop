@@ -5,6 +5,10 @@ import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import pl.coderslab.workshop.models.Exercise;
+import pl.coderslab.workshop.models.Solution;
+import pl.coderslab.workshop.models.User;
+
 public class Admin {
 	
 	/**zwraca true of false jesli zmienna(tutaj string) jest pusta 
@@ -154,6 +158,74 @@ public class Admin {
 			System.out.println("Added "+nazwa+" : "+polaIWartosci);
 		}
 	}
+	
+	/** NOT UNIVERSAL 
+	 * Just for Solution class ,add new solution
+	 * @param scan - scanner 
+	 * @param obj - object type of solution
+
+	 */
+	public static void addv2(Scanner scan,Solution obj) throws SQLException, IllegalAccessException, IllegalArgumentException, 
+	InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+		User user=new User();
+		Exercise exercise=new Exercise();
+		showAllv2(user);
+		System.out.println("Please choose a 'User ID' you wanna assign for Exercise : ");
+		Integer user_id = scan.nextInt();
+
+		showAllv2(exercise);	
+		System.out.println("Please choose a 'Exercise ID' you wanna assign for User : ");
+		Integer exercise_id = scan.nextInt();
+		
+		user=User.loadById(user_id);
+		exercise=Exercise.loadById(exercise_id);
+		Solution[] allSolutions=Solution.loadAll();
+		boolean solutionExist=false;
+		for( Solution sol : allSolutions) {
+			if(	(sol.getExercise_id()==exercise_id) && (sol.getUsers_id() == user_id) ) {
+				solutionExist=true;
+			}
+		}
+		if(solutionExist) {
+			System.out.print("Solution already exist.\n");
+		} else if ( !(user==null || exercise==null) ) {
+			obj.clear();
+			obj.setExercise_id(exercise_id);
+			obj.setUsers_id(user_id);
+			obj.saveToDB();
+			System.out.println("All right.\n");
+		} else {
+			System.out.println("ID is wrong, User or Exercise doesn't exist.\n");
+		}
+		scan.nextLine();
+	}
+	
+	/** NOT UNIVERSAL
+	 *  Display all solutions by User ID 
+	 * @param scan
+	 * @param solution
+	 */
+	public static void viewv2(Scanner scan,Solution solution) throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, 
+																		IllegalArgumentException, InvocationTargetException, SQLException {
+		User user = new User();
+		showAllv2(user);
+		System.out.println("Please choose a 'User ID' you wanna view Exercises : \n");
+		Integer id = scan.nextInt();
+		scan.nextLine();
+		user=User.loadById(id);
+		if(user!=null) {
+			Solution[] solByUserId=Solution.loadAllByUsersId(user);
+			System.out.println("All solution for user : "+user+"\n");
+			for(Solution sol : solByUserId) {
+				System.out.println(sol);
+			}
+			System.out.println("");
+		} else {
+			System.out.println("User ID is wrong ! .\n");
+		}
+		
+	}
+	
 	/** UNIWERSALNE UNIWERSALNE UNIWERSALNE
 	 *  Sluzy do dodania przygotowania obiektu do zapisu, 
 	 *  set ( ustawia ) pola o danych wartosciach
@@ -173,7 +245,7 @@ public class Admin {
 		return obj;
 	}
 	
-	/** CHYBA UNIWERSAL 
+	/** CHYBA UNIWERSAL DLA USER , GROUP, EXERCISES classes
 	 * edytuje wybrany rekord o wybranym id ktory pobiera ze scanera
 	 * @param scan 
 	 * @throws SQLException 
