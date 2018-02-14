@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import pl.coderslab.workshop.mysql.ConnectDB;
 import pl.coderslab.workshop.tools.getFormatedDateTimeInString;
 
 public class Solution {
@@ -16,9 +17,11 @@ public class Solution {
 	
 	public String toString(String option) {
 		if(option.equalsIgnoreCase("req+pola")) {
-			return "Exercise_id, Users_id";
+//		WAZNE musza byc z duzej listery Exercise and User i nie moze byc spacji 
+//		miedzy , "przecinkiem" a nawa pola
+			return "Exercise_id,Users_id"; 
 		} else if (option.equalsIgnoreCase("req+wartosci")){
-			return (id + "," + created + "," + updated + "," + description + "," + exercise_id + "," + users_id);
+			return (exercise_id + "," + users_id);
 		} else if (option.equalsIgnoreCase("pola")){
 			return "[id, created, updated, description, exercise_id, users_id]";
 		} else if (option.equalsIgnoreCase("wartosci")){
@@ -96,6 +99,12 @@ public class Solution {
 		this.exercise_id = exercise_id;
 	}
 	/**
+	 * @param exercise_id the exercise_id to set
+	 */
+	public void setExercise_id(Integer exercise_id) {
+		this.exercise_id = exercise_id;
+	}
+	/**
 	 * @return the users_id
 	 */
 	public int getUsers_id() {
@@ -108,6 +117,12 @@ public class Solution {
 		this.users_id = users_id;
 	}
 	/**
+	 * @param users_id the users_id to set
+	 */
+	public void setUsers_id(Integer users_id) {
+		this.users_id = users_id;
+	}
+	/**
 	 * @return the id
 	 */
 	public int getId() {
@@ -115,14 +130,14 @@ public class Solution {
 	}
 	
 	/** INSERT INTO and UPDATE do DB
-	 * @param conn
 	 * @throws SQLException
 	 */
-	public void saveToDB(Connection conn) throws SQLException {
+	public void saveToDB() throws SQLException {
 		if (this.id == 0) {
 			String sql = "INSERT INTO solution(created, description, exercise_id, users_id) VALUES (?, ?, ?, ?)";
 			String generatedColumns[] = { "ID" };
 			PreparedStatement preparedStatement;
+			Connection conn = ConnectDB.connect();
 			preparedStatement = conn.prepareStatement(sql, generatedColumns);
 			preparedStatement.setString(1, getFormatedDateTimeInString.now());
 			preparedStatement.setString(2, this.description);
@@ -136,6 +151,7 @@ public class Solution {
 		} else {
 			String sql = "UPDATE solution SET updated=?, description=?, exercise_id=?, users_id=? WHERE id = ?";
 		    PreparedStatement preparedStatement;
+		    Connection conn = ConnectDB.connect();
 		    preparedStatement = conn.prepareStatement(sql);
 			preparedStatement.setString(1, getFormatedDateTimeInString.now());
 			preparedStatement.setString(2, this.description);
@@ -147,14 +163,14 @@ public class Solution {
 	}
 	
 	/** SELECT * FROM solution where id=? 
-	 * @param conn
 	 * @param id
 	 * @return
 	 * @throws SQLException
 	 */
-	static public Solution loadSolutionById(Connection conn, int id) throws SQLException {
+	static public Solution loadById(int id) throws SQLException {
 		String sql = "SELECT * FROM solution where id=?";
 		PreparedStatement preparedStatement;
+		Connection conn = ConnectDB.connect();
 		preparedStatement = conn.prepareStatement(sql);
 		preparedStatement.setInt(1, id);
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -172,14 +188,14 @@ public class Solution {
 	}
 	
 	/** SELECT * FROM solution
-	 * @param conn
 	 * @return
 	 * @throws SQLException
 	 */
-	static public Solution[] loadAllSolutions(Connection conn) throws SQLException {
+	static public Solution[] loadAll() throws SQLException {
 		ArrayList<Solution> solutions = new ArrayList<Solution>();
 		String sql = "SELECT * FROM solution";
 		PreparedStatement preparedStatement;
+		Connection conn = ConnectDB.connect();
 		preparedStatement = conn.prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		while (resultSet.next()) {
@@ -198,13 +214,13 @@ public class Solution {
 	}
 	
 	/**DELETE FROM solution WHERE id= ?
-	 * @param conn
 	 * @throws SQLException
 	 */
-	public void delete(Connection conn) throws SQLException {
+	public void delete() throws SQLException {
 	    if (this.id != 0) {
 	        String sql = "DELETE FROM solution WHERE id= ?";
 	        PreparedStatement preparedStatement;
+	        Connection conn = ConnectDB.connect();
 	        preparedStatement = conn.prepareStatement(sql);
 	        preparedStatement.setInt(1, this.id);
 	        preparedStatement.executeUpdate();
@@ -215,15 +231,15 @@ public class Solution {
 	/** pobranie wszystkich rozwiązań danego zadania posortowanych od najnowszego do najstarszego
 	 * (dopisz metodę loadAllByExerciseId do klasy Solution )
 	 * SELECT * FROM solution WHERE exercise_id = 2 ORDER BY created DESC
-	 * @param conn
 	 * @param exercise
 	 * @return Tablice z typami Solution[]
 	 * @throws SQLException
 	 */
-	public static Solution[] loadAllByExerciseId(Connection conn,Exercise exercise) throws SQLException {
+	public static Solution[] loadAllByExerciseId(Exercise exercise) throws SQLException {
 		ArrayList<Solution> solutionsloadAllByExerciseId = new ArrayList<Solution>();
 		String sql = "SELECT * FROM solution WHERE exercise_id = ? ORDER BY created DESC";
 		PreparedStatement preparedStatement;
+		Connection conn = ConnectDB.connect();
 		preparedStatement = conn.prepareStatement(sql);
 		preparedStatement.setInt(1, exercise.getId());
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -242,4 +258,41 @@ public class Solution {
 		return solutionsAllByExerciseIdArray;
 	}
 	
+	/** view - zapyta o id użytkownika którego rozwiązania chcemy zobaczyć.
+	 * @param user
+	 * @return
+	 * @throws SQLException
+	 */
+	public static Solution[] loadAllByUsersId(User user) throws SQLException {
+		ArrayList<Solution> solutionsLoadedAllByUsersId = new ArrayList<Solution>();
+		String sql = "SELECT * FROM solution WHERE users_id = ? ORDER BY created DESC";
+		PreparedStatement preparedStatement;
+		Connection conn = ConnectDB.connect();
+		preparedStatement = conn.prepareStatement(sql);
+		preparedStatement.setInt(1, user.getId());
+		ResultSet resultSet = preparedStatement.executeQuery();
+		while (resultSet.next()) {
+			Solution loadedSolutionByUsersId = new Solution();
+			loadedSolutionByUsersId.id = resultSet.getInt("id");
+			loadedSolutionByUsersId.created = resultSet.getString("created");
+			loadedSolutionByUsersId.updated= resultSet.getString("updated");
+			loadedSolutionByUsersId.description= resultSet.getString("description");
+			loadedSolutionByUsersId.exercise_id = resultSet.getInt("exercise_id");
+			loadedSolutionByUsersId.users_id = resultSet.getInt("users_id");
+			solutionsLoadedAllByUsersId.add(loadedSolutionByUsersId);
+		}
+		Solution[] solutionsAllByExerciseIdArray = new Solution[solutionsLoadedAllByUsersId.size()];
+		solutionsAllByExerciseIdArray = solutionsLoadedAllByUsersId.toArray(solutionsAllByExerciseIdArray);
+		return solutionsAllByExerciseIdArray;
+	}
+	
+	public Solution clear() {
+		this.id=0;
+		this.created=null;
+		this.updated=null;
+		this.setDescription(null);
+		this.setExercise_id(0);
+		this.setUsers_id(0);
+		return this;
+	}
 }
