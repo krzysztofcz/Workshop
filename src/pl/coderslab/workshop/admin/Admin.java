@@ -205,7 +205,7 @@ public class Admin {
 	 * @param scan
 	 * @param solution
 	 */
-	public static void viewv2(Scanner scan,Solution solution) throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, 
+	public static Solution[] viewv2(Scanner scan,Solution solution) throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, 
 																		IllegalArgumentException, InvocationTargetException, SQLException {
 		User user = new User();
 		showAllv2(user);
@@ -213,6 +213,41 @@ public class Admin {
 		Integer id = scan.nextInt();
 		scan.nextLine();
 		user=User.loadById(id);
+		if(user!=null) {
+			Solution[] solByUserId=Solution.loadAllByUsersId(user);
+			System.out.println("All solution for user : "+user+"\n");
+			for(Solution sol : solByUserId) {
+				System.out.println(sol);
+			}
+			System.out.println("");
+			return solByUserId;
+		} else {
+			System.out.println("User ID is wrong ! .\n");
+			return null;
+		}
+		
+	}
+	
+	/** NOT UNIVERSAL
+	 *  Display all solutions by User ID 
+	 * @param scan
+	 * @param solution
+	 */
+	public static Solution[] viewv3(Solution solution) throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, 
+																		IllegalArgumentException, InvocationTargetException, SQLException {
+			
+			
+			return Solution.loadAll();		
+	}
+	
+	/** NOT UNIVERSAL
+	 *  Display all solutions for object USER
+	 * @param scan
+	 * @param solution
+	 * @param object type user for this one you gonna see all exercises
+	 */
+	public static void viewv2(Scanner scan,Solution solution,User user) throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, 
+																		IllegalArgumentException, InvocationTargetException, SQLException {
 		if(user!=null) {
 			Solution[] solByUserId=Solution.loadAllByUsersId(user);
 			System.out.println("All solution for user : "+user+"\n");
