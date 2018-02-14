@@ -1,5 +1,7 @@
 package pl.coderslab.workshop.admin;
 
+import pl.coderslab.workshop.models.Solution;
+
 public class PrintOutMenu {
 
 	/**
@@ -27,7 +29,7 @@ public class PrintOutMenu {
 	}
 
 	/**
-	 * 
+	 * MENU for all except SOLUTION
 	 */
 	public String toString() {
 		StringBuffer sb= new StringBuffer();
@@ -35,6 +37,20 @@ public class PrintOutMenu {
 		sb.append("1. add - dodanie "+this.menuName+"\n");
 		sb.append("2. edit- edycja "+this.menuName+"\n");
 		sb.append("3. delete- edycja "+this.menuName+"\n");
+		sb.append("4. QUIT- zakończenie programu\n");
+		sb.append("=== end MENU ===");
+		return sb.toString();
+	}
+	
+	/**
+	 * 
+	 */
+	public String toString(Solution solution) {
+		StringBuffer sb= new StringBuffer();
+		sb.append("=== start MENU ===\n");
+		sb.append("1. add - dodanie "+this.menuName+"\n");
+		sb.append("2. view - edycja "+this.menuName+"\n");
+		sb.append(" \n");
 		sb.append("4. QUIT- zakończenie programu\n");
 		sb.append("=== end MENU ===");
 		return sb.toString();
