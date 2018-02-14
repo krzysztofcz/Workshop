@@ -1,18 +1,11 @@
 package pl.coderslab.workshop;
 
-//import java.sql.Connection;
-//import java.sql.DriverManager;
-//import java.sql.SQLException;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 
 import pl.coderslab.workshop.models.Exercise;
 import pl.coderslab.workshop.models.Group;
 import pl.coderslab.workshop.models.Solution;
 import pl.coderslab.workshop.models.User;
-import pl.coderslab.workshop.mysql.ConnectDB;
-
 
 public class main1 {
 
@@ -155,8 +148,8 @@ public class main1 {
 //		} catch (SQLException e) {
 //			e.printStackTrace();
 //		}
-		Connection con = ConnectDB.connect();
-		User[] user999 = User.loadAll(con);
+
+		User[] user999 = User.loadAll();
 		for ( User us : user999) {
 			System.out.println(us);
 		}
