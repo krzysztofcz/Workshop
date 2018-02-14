@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import pl.coderslab.workshop.mysql.ConnectDB;
+
 public class Exercise {
 
 	private int id;
@@ -89,11 +91,13 @@ public class Exercise {
 	 * @param conn
 	 * @throws SQLException
 	 */
-	public void saveToDB(Connection conn) throws SQLException {
+	public void saveToDB() throws SQLException {
+		Connection conn = ConnectDB.connect();
 		if (this.id == 0) {
 			String sql = "INSERT INTO exercise(title, description) VALUES (?, ?)";
 			String generatedColumns[] = { "ID" };
 			PreparedStatement preparedStatement;
+			
 			preparedStatement = conn.prepareStatement(sql, generatedColumns);
 			preparedStatement.setString(1, this.title);
 			preparedStatement.setString(2, this.description);
@@ -119,9 +123,10 @@ public class Exercise {
 	 * @return
 	 * @throws SQLException
 	 */
-	static public Exercise loadById(Connection conn, int id) throws SQLException {
+	static public Exercise loadById(Integer id) throws SQLException {
 		String sql = "SELECT * FROM exercise where id=?";
 		PreparedStatement preparedStatement;
+		Connection conn = ConnectDB.connect();
 		preparedStatement = conn.prepareStatement(sql);
 		preparedStatement.setInt(1, id);
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -140,10 +145,11 @@ public class Exercise {
 	 * @return tablica typu Excercise[] ze wszystkimi zadaniami
 	 * @throws SQLException
 	 */
-	static public Exercise[] loadAll(Connection conn) throws SQLException {
+	static public Exercise[] loadAll() throws SQLException {
 		ArrayList<Exercise> exercises = new ArrayList<Exercise>();
 		String sql = "SELECT * FROM exercise";
 		PreparedStatement preparedStatement;
+		Connection conn = ConnectDB.connect();
 		preparedStatement = conn.prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		while (resultSet.next()) {
@@ -158,13 +164,13 @@ public class Exercise {
 		return exercisesArray;
 	}
 	/** DELETE FROM Exercise WHERE id= ? 
-	 * @param con parametr polaczenia
 	 * @throws SQLException 
 	 */
-	public void delete(Connection conn) throws SQLException {
+	public void delete() throws SQLException {
 	    if (this.id != 0) {
 	        String sql = "DELETE FROM exercise WHERE id= ?";
 	        PreparedStatement preparedStatement;
+	        Connection conn = ConnectDB.connect();
 	        preparedStatement = conn.prepareStatement(sql);
 	        preparedStatement.setInt(1, this.id);
 	        preparedStatement.executeUpdate();
@@ -180,13 +186,14 @@ public class Exercise {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static Exercise[] loadAllByUserId(Connection conn, User user) throws SQLException {
+	public static Exercise[] loadAllByUserId(User user) throws SQLException {
 		ArrayList<Exercise> exercisesByUserId = new ArrayList<Exercise>();
 		String sql = "SELECT exercise.id,exercise.title,exercise.description "
 				+ "FROM exercise JOIN solution ON exercise.id=solution.exercise_id "
 				+ "JOIN Users ON solution.users_id = Users.id "
 				+ "WHERE Users.id= ? ";
 		PreparedStatement preparedStatement;
+		Connection conn = ConnectDB.connect();
 		preparedStatement = conn.prepareStatement(sql);
 		preparedStatement.setInt(1, user.getId());
 		ResultSet resultSet = preparedStatement.executeQuery();
